@@ -1,0 +1,15 @@
+parameters:
+# nothing to declare
+
+services:
+  _defaults:
+    autowire: true
+
+  LeoVie\PhpMethodModifier\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/PhpCleanCodeBundle.php'
+
+  LeoVie\PhpMethodModifier\Service\ModifyMethodService:
+    public: true

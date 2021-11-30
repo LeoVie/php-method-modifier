@@ -1,0 +1,49 @@
+{
+  "timeout": 10,
+  "source": {
+    "directories": [
+      "src"
+    ]
+  },
+  "phpUnit": {
+    "configDir": "."
+  },
+  "logs": {
+    "text": "build/logs/infection.log"
+  },
+  "mutators": {
+    "@default": true,
+    "GreaterThan": {
+      "ignore": [
+        "LeoVie\\PhpCleanCode\\Rule\\ConcreteRule\\CCK01SpareComments::check"
+      ]
+    },
+    "UnwrapRtrim": {
+      "ignore": [
+        "LeoVie\\PhpCleanCode\\Rule\\ConcreteRule\\CCF07ConsistentIndentationCharacters::check"
+      ]
+    },
+    "IncrementInteger": {
+      "ignore": [
+        "LeoVie\\PhpCleanCode\\Rule\\RuleResult\\RuleResultCollection::sortRuleResultsByRuleName"
+      ]
+    },
+    "DecrementInteger": {
+      "ignore": [
+        "LeoVie\\PhpCleanCode\\Rule\\RuleResult\\RuleResultCollection::sortRuleResultsByRuleName"
+      ]
+    },
+    "LessThan": {
+      "ignore": [
+        "LeoVie\\PhpCleanCode\\Rule\\RuleResult\\RuleResultCollection::sortRuleResultsByRuleName"
+      ]
+    },
+    "CastInt": {
+      "ignore": [
+        "LeoVie\\PhpCleanCode\\Scorer\\ConcreteScorers\\CompliancesAndViolationsMatterScorer::create",
+        "LeoVie\\PhpCleanCode\\Scorer\\ConcreteScorers\\OnlyViolationsMatterScorer::create"
+      ]
+    }
+  },
+  "tmpDir": "../cache"
+}
