@@ -13,5 +13,5 @@ parameters:
             - %currentWorkingDirectory%/src/DependencyInjection/*
             - %currentWorkingDirectory%/src/ServiceFactory/*
     ignoreErrors:
-        - '#Method LeoVie\\PhpMethodModifier\\Tests.+ has parameter .+ with no value type specified in iterable type .+#'
+#        - '#Method LeoVie\\PhpMethodModifier\\Tests.+ has parameter .+ with no value type specified in iterable type .+#'
         - '#Method LeoVie\\PhpMethodModifier\\Tests.+ return type has no value type specified in iterable type .+#'
