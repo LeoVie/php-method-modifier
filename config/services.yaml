@@ -18,5 +18,5 @@ services:
   LeoVie\PhpMethodModifier\Model\AccessModifier\AccessModifierCollection:
     arguments: [ !tagged_iterator { tag: 'app.access_modifier' } ]
 
-  LeoVie\PhpMethodModifier\Service\ModifyMethodService:
+  LeoVie\PhpMethodModifier\Service\MethodModifierService:
     public: true
