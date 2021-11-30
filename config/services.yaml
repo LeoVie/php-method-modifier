@@ -9,7 +9,7 @@ services:
     resource: '../src/'
     exclude:
       - '../src/DependencyInjection/'
-      - '../src/PhpCleanCodeBundle.php'
+      - '../src/PhpMethodModifierBundle.php'
 
   _instanceof:
     LeoVie\PhpMethodModifier\Model\AccessModifier\AccessModifier:

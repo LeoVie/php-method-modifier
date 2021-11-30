@@ -5,7 +5,6 @@ namespace LeoVie\PhpMethodModifier\Service;
 use LeoVie\PhpMethodModifier\Exception\MethodCannotBeModifiedToNonClassContext;
 use LeoVie\PhpMethodModifier\Model\AccessModifier\AccessModifier;
 use LeoVie\PhpMethodModifier\Model\AccessModifier\AccessModifierCollection;
-use LeoVie\PhpMethodModifier\Model\AccessModifier\PublicModifier;
 use LeoVie\PhpMethodModifier\Model\Method;
 use LeoVie\PhpMethodModifier\Model\MethodContext\ClassMethodContext;
 use LeoVie\PhpMethodModifier\Model\MethodContext\FreeMethodContext;
