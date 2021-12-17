@@ -79,6 +79,14 @@ class MethodModifierServiceTest extends TestCase
                 'expected' => Method::create($code, FreeMethodContext::create()),
                 'method' => Method::create('public ' . $code, ClassMethodContext::create(PublicModifier::create())),
             ],
+            'static free method' => [
+                'expected' => Method::create($code, FreeMethodContext::create()),
+                'method' => Method::create('static ' . $code, FreeMethodContext::create()),
+            ],
+            'static class method' => [
+                'expected' => Method::create($code, FreeMethodContext::create()),
+                'method' => Method::create('public static ' . $code, ClassMethodContext::create(PublicModifier::create())),
+            ],
         ];
     }
 

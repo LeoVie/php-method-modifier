@@ -56,7 +56,7 @@ class MethodModifierService
     {
         $methodContext = $method->getMethodContext();
         if ($methodContext instanceof FreeMethodContext) {
-            return $method;
+            return $this->removeStaticModifier($method);
         }
         /** @var ClassMethodContext $methodContext */
         $methodContext = $method->getMethodContext();
@@ -65,17 +65,32 @@ class MethodModifierService
             throw MethodCannotBeModifiedToNonClassContext::create();
         }
 
-        $methodCode = $method->getCode();
-        /** @var string $methodCodeWithoutAccessModifier */
-        $methodCodeWithoutAccessModifier = \Safe\preg_replace(
-            \Safe\sprintf('@^%s@', $methodContext->getAccessModifier()->getName()),
-            '',
-            $methodCode
+        return $this->removeStaticModifier(
+            Method::create(
+                $this->removeAccessModifier($method->getCode(), $methodContext),
+                FreeMethodContext::create()
+            )
         );
+    }
 
+    private function removeAccessModifier(string $methodCode, ClassMethodContext $methodContext): string
+    {
+        return trim(
+            \Safe\preg_replace(
+                \Safe\sprintf('@^%s@', $methodContext->getAccessModifier()->getName()),
+                '',
+                $methodCode
+            )
+        );
+    }
+
+    private function removeStaticModifier(Method $method): Method
+    {
         return Method::create(
-            trim($methodCodeWithoutAccessModifier),
-            FreeMethodContext::create()
+            trim(
+                \Safe\preg_replace('@^static @', '', $method->getCode())
+            ),
+            $method->getMethodContext()
         );
     }
 }
