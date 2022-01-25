@@ -3,7 +3,8 @@
 namespace LeoVie\PhpMethodModifier\Tests\Unit\Service;
 
 use LeoVie\PhpMethodModifier\Exception\MethodCannotBeModifiedToNonClassContext;
-use LeoVie\PhpMethodModifier\Model\AccessModifier\AccessModifierCollection;
+use LeoVie\PhpMethodModifier\Extractor\AccessModifierExtractor;
+use LeoVie\PhpMethodModifier\Model\AccessModifier\AccessModifier;
 use LeoVie\PhpMethodModifier\Model\AccessModifier\PrivateModifier;
 use LeoVie\PhpMethodModifier\Model\AccessModifier\ProtectedModifier;
 use LeoVie\PhpMethodModifier\Model\AccessModifier\PublicModifier;
@@ -15,23 +16,14 @@ use PHPUnit\Framework\TestCase;
 
 class MethodModifierServiceTest extends TestCase
 {
-    private MethodModifierService $methodModifierService;
-
-    protected function setUp(): void
-    {
-        $accessModifierCollection = new AccessModifierCollection(new \ArrayIterator([
-            PublicModifier::create(),
-            ProtectedModifier::create(),
-            PrivateModifier::create(),
-        ]));
-
-        $this->methodModifierService = new MethodModifierService($accessModifierCollection);
-    }
-
     /** @dataProvider buildMethodProvider */
-    public function testBuildMethod(Method $expected, string $code): void
+    public function testBuildMethod(Method $expected, string $code, ?AccessModifier $accessModifier): void
     {
-        self::assertEquals($expected, $this->methodModifierService->buildMethod($code));
+        $accessModifierExtractor = $this->createMock(AccessModifierExtractor::class);
+        $accessModifierExtractor->method('extract')->willReturn($accessModifier);
+        $methodModifierService = new MethodModifierService($accessModifierExtractor);
+
+        self::assertEquals($expected, $methodModifierService->buildMethod($code));
     }
 
     public function buildMethodProvider(): \Generator
@@ -39,53 +31,57 @@ class MethodModifierServiceTest extends TestCase
         $code = 'function foo(): void { // doSomething } ';
         yield 'free method' => [
             'expected' => Method::create(trim($code), FreeMethodContext::create()),
-            $code,
+            'code' => $code,
+            'accessModifier' => null,
         ];
 
         $code = 'public function foo(): void { // doSomething }';
         yield 'public class method' => [
             'expected' => Method::create($code, ClassMethodContext::create(PublicModifier::create())),
             'code' => ' ' . $code,
+            'accessModifier' => PublicModifier::create(),
         ];
 
         $code = 'protected function foo(): void { // doSomething }';
         yield 'protected class method' => [
             'expected' => Method::create($code, ClassMethodContext::create(ProtectedModifier::create())),
             'code' => $code,
+            'accessModifier' => ProtectedModifier::create(),
         ];
 
         $code = 'private function foo(): void { // doSomething }';
         yield 'private class method' => [
             'expected' => Method::create($code, ClassMethodContext::create(PrivateModifier::create())),
             'code' => $code,
+            'accessModifier' => PrivateModifier::create(),
         ];
     }
 
-    /** @dataProvider modifyMethodToNonClassContextProvider */
-    public function testModifyMethodToNonClassContext(Method $expected, Method $method): void
+    /** @dataProvider modifyMethodToNonClassMethodProvider */
+    public function testModifyMethodToNonClassMethod(Method $expected, Method $method): void
     {
-        self::assertEquals($expected, $this->methodModifierService->modifyMethodToNonClassContext($method));
+        $accessModifierExtractor = $this->createMock(AccessModifierExtractor::class);
+        $methodModifierService = new MethodModifierService($accessModifierExtractor);
+
+        self::assertEquals($expected, $methodModifierService->modifyMethodToNonClassContext($method));
     }
 
-    public function modifyMethodToNonClassContextProvider(): array
+    public function modifyMethodToNonClassMethodProvider(): array
     {
-        $code = 'function foo(): void { // doSomething }';
+        $code = 'function foo(): void { }';
+
         return [
             'free method' => [
                 'expected' => Method::create($code, FreeMethodContext::create()),
-                'method' => Method::create($code . ' ', FreeMethodContext::create()),
+                'method' => Method::create($code, FreeMethodContext::create()),
             ],
             'class method' => [
                 'expected' => Method::create($code, FreeMethodContext::create()),
                 'method' => Method::create('public ' . $code, ClassMethodContext::create(PublicModifier::create())),
             ],
-            'static free method' => [
-                'expected' => Method::create($code, FreeMethodContext::create()),
-                'method' => Method::create('static ' . $code, FreeMethodContext::create()),
-            ],
             'static class method' => [
                 'expected' => Method::create($code, FreeMethodContext::create()),
-                'method' => Method::create('public static ' . $code, ClassMethodContext::create(PublicModifier::create())),
+                'method' => Method::create('private static ' . $code, ClassMethodContext::create(PrivateModifier::create())),
             ],
         ];
     }
@@ -97,6 +93,8 @@ class MethodModifierServiceTest extends TestCase
 
         self::expectException(MethodCannotBeModifiedToNonClassContext::class);
 
-        $this->methodModifierService->modifyMethodToNonClassContext($method);
+        $accessModifierExtractor = $this->createMock(AccessModifierExtractor::class);
+        $methodModifierService = new MethodModifierService($accessModifierExtractor);
+        $methodModifierService->modifyMethodToNonClassContext($method);
     }
 }
