@@ -31,7 +31,8 @@
         "infection/infection": "^0.25.3",
         "phpunit/phpunit": "^9.5",
         "vimeo/psalm": "^4.10",
-        "psalm/plugin-symfony": "^3.0"
+        "psalm/plugin-symfony": "^3.0",
+        "symfony/phpunit-bridge": "^6.0"
     },
     "scripts": {
         "psalm": "psalm -c build/config/psalm.xml --show-info=true",

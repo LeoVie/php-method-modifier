@@ -36,9 +36,9 @@ class MethodModifierServiceTest extends TestCase
 
     public function buildMethodProvider(): \Generator
     {
-        $code = 'function foo(): void { // doSomething }';
+        $code = 'function foo(): void { // doSomething } ';
         yield 'free method' => [
-            'expected' => Method::create($code, FreeMethodContext::create()),
+            'expected' => Method::create(trim($code), FreeMethodContext::create()),
             $code,
         ];
 
@@ -73,7 +73,7 @@ class MethodModifierServiceTest extends TestCase
         return [
             'free method' => [
                 'expected' => Method::create($code, FreeMethodContext::create()),
-                'method' => Method::create($code, FreeMethodContext::create()),
+                'method' => Method::create($code . ' ', FreeMethodContext::create()),
             ],
             'class method' => [
                 'expected' => Method::create($code, FreeMethodContext::create()),

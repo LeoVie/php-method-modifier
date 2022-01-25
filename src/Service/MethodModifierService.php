@@ -75,21 +75,23 @@ class MethodModifierService
 
     private function removeAccessModifier(string $methodCode, ClassMethodContext $methodContext): string
     {
-        return trim(
-            \Safe\preg_replace(
-                \Safe\sprintf('@^%s@', $methodContext->getAccessModifier()->getName()),
-                '',
-                $methodCode
-            )
+        /** @var string $codeWithoutAccessModifier */
+        $codeWithoutAccessModifier = \Safe\preg_replace(
+            \Safe\sprintf('@^%s@', $methodContext->getAccessModifier()->getName()),
+            '',
+            $methodCode
         );
+
+        return trim($codeWithoutAccessModifier);
     }
 
     private function removeStaticModifier(Method $method): Method
     {
+        /** @var string $codeWithoutStatic */
+        $codeWithoutStatic = \Safe\preg_replace('@^static @', '', $method->getCode());
+
         return Method::create(
-            trim(
-                \Safe\preg_replace('@^static @', '', $method->getCode())
-            ),
+            trim($codeWithoutStatic),
             $method->getMethodContext()
         );
     }
