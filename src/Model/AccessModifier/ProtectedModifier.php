@@ -2,6 +2,7 @@
 
 namespace LeoVie\PhpMethodModifier\Model\AccessModifier;
 
+/** @psalm-immutable */
 class ProtectedModifier implements AccessModifier
 {
     private const NAME = 'protected';

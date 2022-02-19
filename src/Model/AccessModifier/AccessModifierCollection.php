@@ -2,16 +2,19 @@
 
 namespace LeoVie\PhpMethodModifier\Model\AccessModifier;
 
+use Iterator;
+
+/** @psalm-immutable */
 class AccessModifierCollection
 {
-    /** @param \Iterator<int, AccessModifier> $accessModifiers */
+    /** @param Iterator<int, AccessModifier> $accessModifiers */
     public function __construct(private iterable $accessModifiers)
     {
     }
 
-    /** @return AccessModifier[] */
-    public function getAll(): array
+    /** @return Iterator<int, AccessModifier> */
+    public function getAll(): Iterator
     {
-        return iterator_to_array($this->accessModifiers);
+        return $this->accessModifiers;
     }
 }

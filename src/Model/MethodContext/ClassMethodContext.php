@@ -4,6 +4,7 @@ namespace LeoVie\PhpMethodModifier\Model\MethodContext;
 
 use LeoVie\PhpMethodModifier\Model\AccessModifier\AccessModifier;
 
+/** @psalm-immutable */
 class ClassMethodContext implements MethodContext
 {
     private function __construct(
