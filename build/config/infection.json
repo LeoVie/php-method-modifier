@@ -13,9 +13,9 @@
   },
   "mutators": {
     "@default": true,
-    "IncrementInteger": {
+    "UnwrapTrim": {
       "ignore": [
-        "LeoVie\\PhpMethodModifier\\Service\\MethodModifierService::extractAccessModifier"
+        "LeoVie\\PhpMethodModifier\\Service\\MethodModifierService::removeAccessModifier"
       ]
     }
   },

@@ -4,6 +4,7 @@ namespace LeoVie\PhpMethodModifier\Model;
 
 use LeoVie\PhpMethodModifier\Model\MethodContext\MethodContext;
 
+/** @psalm-immutable */
 class Method
 {
     private function __construct(
