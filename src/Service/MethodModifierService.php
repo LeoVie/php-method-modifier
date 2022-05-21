@@ -62,7 +62,7 @@ class MethodModifierService
         $code = trim($methodCode);
         /** @var string $codeWithoutAccessModifier */
         $codeWithoutAccessModifier = \Safe\preg_replace(
-            \Safe\sprintf('@^%s@', $methodContext->getAccessModifier()->getName()),
+            sprintf('@^%s@', $methodContext->getAccessModifier()->getName()),
             '',
             $code
         );
